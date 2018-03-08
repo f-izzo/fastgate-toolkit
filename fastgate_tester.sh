@@ -103,6 +103,9 @@ if [ -n "$1" -a "$1" = "getroot" ]; then
   echo "Una volta effettuato il login, puoi richiamare una shell di root digitando \"sh -l\" e, al prompt, inserire:"
   echo "Username: \"lanadmin\""
   echo "Password: \"lanpasswd\""
+  echo "oppure"
+  echo "Username: \"FASTGate\""
+  echo "Password: \"Testplant123\""
   echo "Attento a non rompere nulla!"
   
 
