@@ -2,8 +2,8 @@
 
 ## web interface exploit
 `./fastgate_tester.sh getroot`
-The script enables SSH by setting NVRAM variables, this method will be reverted
-by a reset of the router.
+The script enables SSH by setting NVRAM variables,  
+this method will be reverted by a reset of the router.
 
 ## Make persistent modifications to filesystem
 ```
@@ -12,9 +12,21 @@ mkdir /tmp/ubifs
 mount -o remount,rw ubi0:rootfs_ubifs /
 mount -o bind -t ubifs ubi0:rootfs_ubifs /tmp/ubifs
 ```
-Then copy or modify files in /tmp/ubifs
+- Then copy or modify files in /tmp/ubifs
+- Unmount the filesystem and reboot to apply changes
+```
+umount /tmp/ubifs
+reboot
+```
 
 ## Custom firewall rules
+The stock firewall has various issues, like:
+- allowing IPv6 connections from internet to LAN
+...
+
+This method allow to replace stock iptables configuration with a new one.
+A complete IPv6 firewall configuration is provided.
+
 Custom rules are saved in `iptables_rules`, the example takes care of clearing
 existing rules
 
