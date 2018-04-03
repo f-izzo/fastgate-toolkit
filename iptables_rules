@@ -7,3 +7,31 @@ if [ $? -eq 1 ]; then
     iptables -I INPUT 2 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
     iptables -I INPUT 3 -i br0 -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT
 fi
+
+## IPv6 firewall rules
+                                            
+# Clear existing rules                             
+ip6tables -F INPUT                                   
+ip6tables -F FORWARD                          
+ip6tables -F OUTPUT                           
+                                                  
+ip6tables -A INPUT -m rt --rt-type 0 -j DROP                                               
+ip6tables -A FORWARD -m rt --rt-type 0 -j DROP                         
+ip6tables -A OUTPUT -m rt --rt-type 0 -j DROP                                                
+                                                                       
+# Filter packets to the router                                                                
+ip6tables -A INPUT -i lo -j ACCEPT                                     
+ip6tables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT  
+ip6tables -A INPUT -p icmpv6 -j ACCEPT                                                        
+ip6tables -A INPUT -m conntrack --ctstate NEW -i br0 -j ACCEPT                                                                                  
+                                                                         
+# Filter packets to the LAN                                                    
+ip6tables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT            
+ip6tables -A FORWARD -p icmpv6 -j ACCEPT                                                  
+ip6tables -A FORWARD -m conntrack --ctstate NEW -i br0 -j ACCEPT
+                          
+# Set chain policy        
+ip6tables -P INPUT DROP   
+ip6tables -P FORWARD DROP 
+ip6tables -P OUTPUT ACCEPT
+
