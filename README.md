@@ -1,6 +1,47 @@
 # Fastgate Toolkit
 
-## Usage
+## web interface exploit
 `./fastgate_tester.sh getroot`
+The script enables SSH by setting NVRAM variables, this method will be reverted
+by a reset of the router.
+
+## Make persistent modifications to filesystem
+```
+# Create mount point
+mkdir /tmp/ubifs
+mount -o remount,rw ubi0:rootfs_ubifs /
+mount -o bind -t ubifs ubi0:rootfs_ubifs /tmp/ubifs
+```
+Then copy or modify files in /tmp/ubifs
+
+## Custom firewall rules
+Custom rules are saved in `iptables_rules`, the example takes care of clearing
+existing rules
+
+The files can be sent to the Fastgate by starting a `python3 -m http.server`
+inside this repository folder, to use `wget` on the Fastgate
+```
+# mount /tmp/ubifs
+cd /tmp
+wget http://your-pc-ip:8088/firewall.sh
+cd /tmp/ubifs
+mv usr/sbin/firewall.sh usr/sbin/firewall //be careful not to overwrite original firewall.sh
+mv /tmp/firewall.sh usr/sbin/firewall.sh
+chmod 775 usr/sbin/firewall.sh
+```
+- copy `iptables_rules` in `/etc` in a similar manner
+
+## Enable SSH via rc-init script
+This method survives the reset of the router (which only clears NVRAM)
+```
+# mount /tmp/ubifs
+cd /tmp
+wget http://192.168.1.154:8088/sshd.sh
+cp /tmp/sshd.sh /tmp/ubifs/etc/init.d/
+chmod 755 /tmp/ubifs/etc/init.d/sshd.sh
+cd /tmp/ubifs/etc/rc3.d/
+ln -s ../init.d/sshd.sh S99ssh
+umount /tmp/ubifs
+```
 
 Credits to lorenzodes for web-interface exploit

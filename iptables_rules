@@ -1,0 +1,9 @@
+# Set custom firewall rules
+# Test first if rules are already present
+iptables -C INPUT -i br0 -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT
+if [ $? -eq 1 ]; then
+    echo "Adding firewall rules for SSH"
+    iptables -I INPUT 1 -i lo -j ACCEPT
+    iptables -I INPUT 2 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+    iptables -I INPUT 3 -i br0 -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT
+fi
