@@ -56,4 +56,33 @@ ln -s ../init.d/sshd.sh S99ssh
 umount /tmp/ubifs
 ```
 
+## Install a Debian chroot on a USB drive
+
+Format the USB drive using provided `mke2fs` (it will take a while)
+
+```sh
+# Make sure /dev/sda1 is the correct device
+# You can use /statusapi/sbin/blkid
+/statusapi/sbin/mke2fs /dev/sda1
+```
+
+On a Debian system, [create a Debian chroot](https://wiki.debian.org/ArmHardFloatChroot).
+
+```sh
+apt install debootstrap qemu-user-static
+qemu-debootstrap --arch=armel sid /path/to/sid-armel http://ftp.debian.org/debian/
+```
+
+Copy the chroot to the USB drive. Make sure you keep permissions (i.e. use
+`tar -a` if making a tarball or `cp -a`).
+
+Edit and copy `chroot.sh` to the USB drive and make it executable.
+
+Get into the chroot:
+
+```sh
+/mnt/sda1/chroot.sh
+```
+
+
 Credits to lorenzodes for web-interface exploit
