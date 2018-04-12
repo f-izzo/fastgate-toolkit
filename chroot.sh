@@ -4,22 +4,26 @@ chroot="/mnt/sda1/sid-armel"
 bin="/bin/bash"
 usb="/dev/sda1"
 
-busybox="/statusapi/bin/busybox"
+bb="/statusapi/bin/busybox"
 
+# Run bash by default
 if [ ! "x$1" = "x" ]; then
 	bin="$1"
 fi
 
-$busybox mkdir -p "${chroot}/dev"
-$busybox mkdir -p "${chroot}/proc"
-$busybox mkdir -p "${chroot}/sys"
-$busybox mkdir -p "${chroot}/fastgate"
-$busybox mkdir -p "${chroot}/usb"
+# Create mountpoints
+$bb mkdir -p "${chroot}/dev"
+$bb mkdir -p "${chroot}/proc"
+$bb mkdir -p "${chroot}/sys"
+$bb mkdir -p "${chroot}/fastgate"
+$bb mkdir -p "${chroot}/usb"
 
-$busybox mount -o bind / "${chroot}/fastgate" 2>&1 > /dev/null
-$busybox mount -o bind /dev "${chroot}/dev" 2>&1 > /dev/null
-$busybox mount -o bind /proc "${chroot}/proc" 2>&1 > /dev/null
-$busybox mount -o bind /sys "${chroot}/sys" 2>&1 > /dev/null
-$busybox mount "$usb" "${chroot}/usb" 2>&1 > /dev/null
+# Mount stuff if not already mounted
+$bb mount | $bb grep -q "${chroot}/fastgate" || $bb mount -o bind /        "${chroot}/fastgate"
+$bb mount | $bb grep -q "${chroot}/dev"      || $bb mount -o bind /dev     "${chroot}/dev"
+$bb mount | $bb grep -q "${chroot}/dev/pts"  || $bb mount -o bind /dev/pts "${chroot}/dev/pts"
+$bb mount | $bb grep -q "${chroot}/proc"     || $bb mount -o bind /proc    "${chroot}/proc"
+$bb mount | $bb grep -q "${chroot}/sys"      || $bb mount -o bind /sys     "${chroot}/sys"
+$bb mount | $bb grep -q "${chroot}/usb"      || $bb mount         "$usb"   "${chroot}/usb"
 
-PATH="/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin:/bin" $busybox chroot "$chroot" "$bin"
+PATH="/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin:/bin" $bb chroot "$chroot" "$bin"
