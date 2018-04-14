@@ -1,6 +1,6 @@
 # Fastgate Toolkit
 
-You can find quick information here and detailed information on the [Wiki](https://github.com/Nimayer/fastgate-toolkit/wiki)
+You can find quick information on this page and detailed information on the [Wiki](https://github.com/Nimayer/fastgate-toolkit/wiki)
 
 ## Obtain SSH access
 You can obtain SSH access to the FastGATE using the [fastgate-python](https://github.com/Depau/fastgate-python#installation) script as explained [here](https://github.com/Nimayer/fastgate-toolkit/wiki/Get-a-root-shell)
