@@ -1,9 +1,10 @@
 # Fastgate Toolkit
 
-## web interface exploit
-`./fastgate_tester.sh getroot`
-The script enables SSH by setting NVRAM variables,  
-this method will be reverted by a reset of the router.
+You can find quick information here and detailed information on the [Wiki](https://github.com/Nimayer/fastgate-toolkit/wiki)
+
+## Obtain SSH access
+You can obtain SSH access to the FastGATE using the [fastgate-python](https://github.com/Depau/fastgate-python#installation) script as explained [here](https://github.com/Nimayer/fastgate-toolkit/wiki/Get-a-root-shell)
+
 
 ## Make persistent modifications to filesystem
 ```
