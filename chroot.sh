@@ -29,6 +29,5 @@ $bb mount | $bb grep -q "${chroot}/usb"      || $bb mount         "$usb"   "${ch
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin:/bin"
 export HOME="/root"
 export USER="root"
-export LANG="en_US.UTF-8"
 
 $bb chroot "$chroot" "$bin"
