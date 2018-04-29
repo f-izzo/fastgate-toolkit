@@ -3,22 +3,11 @@
 You can find quick information on this page and detailed information on the [Wiki](https://github.com/Nimayer/fastgate-toolkit/wiki)
 
 ## Obtain SSH access
-You can obtain SSH access to the FastGATE using the [fastgate-python](https://github.com/Depau/fastgate-python#installation) script as explained [here](https://github.com/Nimayer/fastgate-toolkit/wiki/Get-a-root-shell)
+You can obtain SSH access to the FastGATE using the [fastgate-python](https://github.com/Depau/fastgate-python#installation) script as explained [here](https://github.com/Nimayer/fastgate-toolkit/wiki/Get-a-root-shell-(SSH))
 
 
 ## Make persistent modifications to filesystem
-```
-# Create mount point
-mkdir /tmp/ubifs
-mount -o remount,rw ubi0:rootfs_ubifs /
-mount -o bind -t ubifs ubi0:rootfs_ubifs /tmp/ubifs
-```
-- Then copy or modify files in /tmp/ubifs
-- Unmount the filesystem and reboot to apply changes
-```
-umount /tmp/ubifs
-reboot
-```
+You can make persistent changes to the root filesystem as explained [here](https://github.com/Nimayer/fastgate-toolkit/wiki/Make-persistent-changes-to-filesystem).
 
 ## Custom firewall rules
 The stock firewall has various issues, like:
@@ -44,46 +33,9 @@ chmod 775 usr/sbin/firewall.sh
 ```
 - copy `iptables_rules` in `/etc` in a similar manner
 
-## Enable SSH via rc-init script
-This method survives the reset of the router (which only clears NVRAM)
-```
-# mount /tmp/ubifs
-cd /tmp
-wget http://192.168.1.154:8088/sshd.sh
-cp /tmp/sshd.sh /tmp/ubifs/etc/init.d/
-chmod 755 /tmp/ubifs/etc/init.d/sshd.sh
-cd /tmp/ubifs/etc/rc3.d/
-ln -s ../init.d/sshd.sh S99ssh
-umount /tmp/ubifs
-```
+## Install a chroot on a USB drive
+A mainstream distro chroot allows using a package manager to easily get commonly used software (like Python and compilers) running on the gateway. See this [wiki page](https://github.com/Nimayer/fastgate-toolkit/wiki/Set-up-a-chroot) for instructions on how to get a Debian chroot.
 
-## Install a Debian chroot on a USB drive
-
-Format the USB drive using provided `mke2fs` (it will take a while)
-
-```sh
-# Make sure /dev/sda1 is the correct device
-# You can use /statusapi/sbin/blkid
-/statusapi/sbin/mke2fs /dev/sda1
-```
-
-On a Debian system, [create a Debian chroot](https://wiki.debian.org/ArmHardFloatChroot).
-
-```sh
-apt install debootstrap qemu-user-static
-qemu-debootstrap --arch=armel sid /path/to/sid-armel http://ftp.debian.org/debian/
-```
-
-Copy the chroot to the USB drive. Make sure you keep permissions (i.e. use
-`tar -a` if making a tarball or `cp -a`).
-
-Edit and copy `chroot.sh` to the USB drive and make it executable.
-
-Get into the chroot:
-
-```sh
-/mnt/sda1/chroot.sh
-```
-
+Work is being done to get LXC containers running. See [wiki page](https://github.com/Nimayer/fastgate-toolkit/wiki/LXC).
 
 Credits to lorenzodes for web-interface exploit
