@@ -26,4 +26,9 @@ $bb mount | $bb grep -q "${chroot}/proc"     || $bb mount -o bind /proc    "${ch
 $bb mount | $bb grep -q "${chroot}/sys"      || $bb mount -o bind /sys     "${chroot}/sys"
 $bb mount | $bb grep -q "${chroot}/usb"      || $bb mount         "$usb"   "${chroot}/usb"
 
-PATH="/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin:/bin" $bb chroot "$chroot" "$bin"
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin:/bin"
+export HOME="/root"
+export USER="root"
+export LANG="en_US.UTF-8"
+
+$bb chroot "$chroot" "$bin"
